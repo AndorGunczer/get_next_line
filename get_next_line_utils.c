@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/12 10:43:57 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/13 14:39:45 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/14 14:58:12 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int    gnl_strchr(const char *s, int c)
     }
     if (*(s + i) == '\0')
     {
-        return (1);
+        return (0);
     }
     else
     {
@@ -37,23 +37,77 @@ int    gnl_strchr(const char *s, int c)
     }
 }
 
+char	*gnl_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	i;
+
+	i = 0;
+	if (dstsize == 0)
+	{
+		return (0);
+	}
+	if (i < dstsize && *(char *)(src + i) != '\0')
+	{
+		while (*(char *)(src + i) != '\0' && i < dstsize - 1)
+		{
+			*(dst + i) = *(char *)(src + i);
+			i++;
+		}
+	}
+	if (i < dstsize)
+		*(dst + i) = '\0';
+	while (*(src + i) != '\0')
+		i++;
+	return (dst);
+}
+
+char     *only_print(char *ptr)
+{
+    int i;
+    char *str;
+
+    i = gnl_strchr(ptr, '\n');
+    str = ft_calloc(i, sizeof(char));
+    ft_strlcpy(str, ptr, i);
+    ptr++;
+    return (str);
+}
+
 char    *reader(int fd, char *temp)
 {
-    int readcount;
     int newline;
     char *str;
-    int instadel = 0;
+    char *returnable;
+    int j;
+    static int i;
 
-    // str = ft_calloc(BUFFER_SIZE, sizeof(char));
-    str = malloc(BUFFER_SIZE * sizeof(char));
-    while (!newline)
+    str = malloc(1000 * sizeof(char));
+    while (read(fd, str, BUFFER_SIZE) > 0)
     {
-        read(fd, str, BUFFER_SIZE);
-        // printf("%s", str);
-        newline = gnl_strchr(str, '\n');
+        printf("\n%s\n", str);
+        str[BUFFER_SIZE] = '\0';
         temp = ft_strjoin(temp, str);
-        // printf("%s", ft_strjoin(temp, str));
+        if ((newline = gnl_strchr(str, '\n')))
+            break;
     }
-    // ft_split(temp, '\n');
-    return (temp);
+    j = gnl_strchr(temp, '\n');
+    returnable = ft_calloc(j, sizeof(char));
+    gnl_strlcpy(returnable, temp + i, j + 1);
+    // if (gnl_strchr(temp + j + 1))
+    // {
+
+    // }
+    return (returnable);
 }
+
+
+/*
+        else
+        {
+            j = gnl_strchr(temp, '\n');
+            str = ft_calloc(j, sizeof(char));
+            gnl_strlcpy(str, temp + i, j);
+            i = j + 1;
+            return (str);
+        }
+*/
