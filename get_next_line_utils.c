@@ -5,46 +5,93 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/12 10:43:57 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/14 14:58:12 by agunczer         ###   ########.fr       */
+/*   Created: 2021/07/15 17:02:20 by agunczer          #+#    #+#             */
+/*   Updated: 2021/07/16 13:40:53 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../LVL1/ft_lib/retrylibft/libft.h"
-#include <fcntl.h>
-#include <unistd.h>
-#include "get_next_line.h"
-#include <stdio.h>
+#include <stdlib.h>
 
-int    gnl_strchr(const char *s, int c)
+size_t	ft_strlen(const char *s)
 {
-    int i;
+	unsigned int	i;
 
-    i = 0;
-    while (*(s + i) != '\0')
-    {
-        if (*(s + i) == (char)c)
-            return (i);
-        i++;
-    }
-    if (*(s + i) == '\0')
-    {
-        return (0);
-    }
-    else
-    {
-        return (0);
-    }
+	i = 0;
+	while (s[i] != '\0')
+		i++;
+	return (i);
 }
 
-char	*gnl_strlcpy(char *dst, const char *src, size_t dstsize)
+char	*ft_strdup(const char *s1)
+{
+	int		len;
+	int		i;
+	char	*ptr;
+
+	len = ft_strlen(s1);
+	i = 0;
+	ptr = (char *) malloc(len + 1 * sizeof(char));
+	if (ptr == NULL)
+		return ((void *)0);
+	while (i < len)
+	{
+		*(ptr + i) = *(s1 + i);
+		i++;
+	}
+	*(ptr + i) = '\0';
+	return (ptr);
+}
+
+int 	ft_strchr(const char *s, int c)
+{
+	while (*s != '\0')
+	{
+		if (*s == (char)c)
+			return (1);
+		s++;
+	}
+	if (*s == c)
+	{
+		return (1);
+	}
+	else
+	{
+		return (0);
+	}
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	unsigned int	i;
+	char			*ptr;
+
+	i = 0;
+	ptr = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (ptr == 0)
+		return (ptr);
+	while (*(s1 + i) != '\0')
+	{
+		*(ptr + i) = *(s1 + i);
+		i++;
+	}
+	while (*(s2) != '\0')
+	{
+		*(ptr + i) = *(s2);
+		s2++;
+		i++;
+	}
+	*(ptr + i) = '\0';
+	return (ptr);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
 	size_t	i;
 
 	i = 0;
 	if (dstsize == 0)
 	{
-		return (0);
+		return (ft_strlen(src));
 	}
 	if (i < dstsize && *(char *)(src + i) != '\0')
 	{
@@ -58,56 +105,5 @@ char	*gnl_strlcpy(char *dst, const char *src, size_t dstsize)
 		*(dst + i) = '\0';
 	while (*(src + i) != '\0')
 		i++;
-	return (dst);
+	return (i);
 }
-
-char     *only_print(char *ptr)
-{
-    int i;
-    char *str;
-
-    i = gnl_strchr(ptr, '\n');
-    str = ft_calloc(i, sizeof(char));
-    ft_strlcpy(str, ptr, i);
-    ptr++;
-    return (str);
-}
-
-char    *reader(int fd, char *temp)
-{
-    int newline;
-    char *str;
-    char *returnable;
-    int j;
-    static int i;
-
-    str = malloc(1000 * sizeof(char));
-    while (read(fd, str, BUFFER_SIZE) > 0)
-    {
-        printf("\n%s\n", str);
-        str[BUFFER_SIZE] = '\0';
-        temp = ft_strjoin(temp, str);
-        if ((newline = gnl_strchr(str, '\n')))
-            break;
-    }
-    j = gnl_strchr(temp, '\n');
-    returnable = ft_calloc(j, sizeof(char));
-    gnl_strlcpy(returnable, temp + i, j + 1);
-    // if (gnl_strchr(temp + j + 1))
-    // {
-
-    // }
-    return (returnable);
-}
-
-
-/*
-        else
-        {
-            j = gnl_strchr(temp, '\n');
-            str = ft_calloc(j, sizeof(char));
-            gnl_strlcpy(str, temp + i, j);
-            i = j + 1;
-            return (str);
-        }
-*/
