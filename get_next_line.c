@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 14:41:57 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/16 16:11:11 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/17 11:49:16 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int     position_ofn(char *str, int i)
 			return (i);
 		i++;
 	}
-	if (*(str + i) == '\n')
+	if (*(str + i) == '\n' || *(str + i) == '\0')
 	{
 		return (i);
 	}
@@ -83,8 +83,10 @@ char     *reader(int fd, char *warehouse, int *readcount)
     char *str;
     char *temp = NULL;
 
-    str = malloc(BUFFER_SIZE * sizeof(char));
+    str = malloc(BUFFER_SIZE + 1 * sizeof(char));
     *readcount = read(fd, str, BUFFER_SIZE);
+    if (!temp)
+        temp = ft_strdup("");
     while (*readcount > 0)
     {
         if (!temp)
@@ -101,20 +103,22 @@ char     *reader(int fd, char *warehouse, int *readcount)
 
 char    *get_next_line(int fd)
 {
+    printf("!!!!!!!!THIS IS STARTA!!!!!!!!");
     static char *warehouse = NULL;
     static int i = 0;
     static int j = 0;
     int k;
-    int readcount = 0;
+    int readcount = 1;
 
     if (!warehouse)
         warehouse = ft_strdup("");
-    warehouse = reader(fd, warehouse, &readcount);
+    if (readcount != 0)
+        warehouse = reader(fd, warehouse, &readcount);
     j = position_ofn(warehouse, i);
     k = i;
     i = j + 1;
-    printf("k: %d - i: %d - j: %d", k, i, j); //ja da hab ich voll bock drauf
-    return (ft_substr(warehouse, k, j - k));
+    // printf("k: %d - i: %d - j: %d", k, i, j); //ja da hab ich voll bock drauf
+    return (ft_substr(warehouse, k, j - k)); //machst du mir nach ?! //Mein gehirn funktioniert nicht mehr
 }
 
 int	main(void)
@@ -125,7 +129,7 @@ int	main(void)
 	i = 0;
 	//fd = open("test.txt", O_RDONLY);
 	fd = open("test.txt", O_RDONLY);
-	while (i < 3)
+	while (i < 1)
 	{
 		printf("\t-->LINE: %s\n", get_next_line(fd));
 		// get_next_line(fd);
