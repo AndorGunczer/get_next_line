@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 14:41:57 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/17 11:49:16 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/21 10:24:08 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,13 @@ char     *reader(int fd, char *warehouse, int *readcount)
     {
         if (!temp)
             temp = ft_strdup("");
-        temp = ft_strjoin(temp, str);
+        str[BUFFER_SIZE] = '\0';
         newline = ft_strchr(str, '\n');
+        temp = ft_strjoin(temp, str);
         if (newline == 1)
             break;
-        str = malloc(BUFFER_SIZE * sizeof(char));
+        free(str);
+        str = malloc(BUFFER_SIZE + 1 * sizeof(char));
         *readcount = read(fd, str, BUFFER_SIZE);
     }
     return (ft_strjoin(warehouse, temp));
@@ -103,22 +105,24 @@ char     *reader(int fd, char *warehouse, int *readcount)
 
 char    *get_next_line(int fd)
 {
-    printf("!!!!!!!!THIS IS STARTA!!!!!!!!");
     static char *warehouse = NULL;
     static int i = 0;
     static int j = 0;
     int k;
     int readcount = 1;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
     if (!warehouse)
         warehouse = ft_strdup("");
-    if (readcount != 0)
-        warehouse = reader(fd, warehouse, &readcount);
+    warehouse = reader(fd, warehouse, &readcount);
+	if (readcount == 0 && warehouse == NULL)
+		return (NULL);
     j = position_ofn(warehouse, i);
     k = i;
     i = j + 1;
-    // printf("k: %d - i: %d - j: %d", k, i, j); //ja da hab ich voll bock drauf
-    return (ft_substr(warehouse, k, j - k)); //machst du mir nach ?! //Mein gehirn funktioniert nicht mehr
+    printf("\n%s\n", warehouse);
+    return (ft_substr(warehouse, k, j - k + 1)); //machst du mir nach ?! //Mein gehirn funktioniert nicht mehr //ja da hab ich voll bock drauf
 }
 
 int	main(void)
@@ -129,10 +133,11 @@ int	main(void)
 	i = 0;
 	//fd = open("test.txt", O_RDONLY);
 	fd = open("test.txt", O_RDONLY);
-	while (i < 1)
+	while (i < 4)
 	{
-		printf("\t-->LINE: %s\n", get_next_line(fd));
-		// get_next_line(fd);
+		// printf("%s", get_next_line(fd));
+		get_next_line(fd);
 		i++;
 	}
+    // fscanf(stdin, "c");
 }

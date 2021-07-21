@@ -6,13 +6,13 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 17:02:20 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/16 13:40:53 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/20 15:14:00 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-size_t	ft_strlen(const char *s)
+unsigned int	ft_strlen(const char *s)
 {
 	unsigned int	i;
 
@@ -32,7 +32,10 @@ char	*ft_strdup(const char *s1)
 	i = 0;
 	ptr = (char *) malloc(len + 1 * sizeof(char));
 	if (ptr == NULL)
-		return ((void *)0);
+	{
+        free(ptr);
+        return ((void *)0);
+    }
 	while (i < len)
 	{
 		*(ptr + i) = *(s1 + i);
@@ -50,14 +53,14 @@ int 	ft_strchr(const char *s, int c)
 			return (1);
 		s++;
 	}
-	if (*s == c)
-	{
-		return (1);
-	}
-	else
-	{
+	// if (*s == c)
+	// {
+	// 	return (1);
+	// }
+	// else
+	// {
 		return (0);
-	}
+	// }
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -81,12 +84,13 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		i++;
 	}
 	*(ptr + i) = '\0';
+    free((void *)s1);
 	return (ptr);
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+unsigned int	ft_strlcpy(char *dst, const char *src, unsigned int dstsize)
 {
-	size_t	i;
+	unsigned int	i;
 
 	i = 0;
 	if (dstsize == 0)
