@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 17:02:20 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/21 12:47:06 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/22 14:31:59 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*ft_strdup(const char *s1)
 
 	len = ft_strlen(s1);
 	i = 0;
-	ptr = (char *) malloc(len + 1 * sizeof(char));
+	ptr = (char *) calloc(len + 1, sizeof(char));
 	if (ptr == NULL)
 	{
         free(ptr);
@@ -69,7 +69,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	char			*ptr;
 
 	i = 0;
-	ptr = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	ptr = (char *) calloc(ft_strlen(s1) + ft_strlen(s2) + 1, sizeof(char));
 	if (ptr == 0)
 		return (ptr);
 	while (*(s1 + i) != '\0')

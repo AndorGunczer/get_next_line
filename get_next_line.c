@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 14:41:57 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/22 10:20:21 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/22 14:36:28 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ char	*ft_substr(char const *s, unsigned int start, unsigned int len)
 	i = 0;
 	if (start >= ft_strlen(s))
 	{
-		ptr = (char *) malloc(1);
+		ptr = (char *) calloc(1, sizeof(char));
 		*ptr = '\0';
 		return (ptr);
 	}
-	ptr = (char *) malloc(len + 1);
+	ptr = (char *) calloc(len + 1, sizeof(char));
 	if (ptr == 0)
 		return ((char *)0);
 	while (i < start)
@@ -48,26 +48,22 @@ int     position_ofn(char *str, int i)
 	return (i);
 }
 
-// static int	where_is_n(char *str, int *i)
+// static char *output_int(char **str, char *result, int i)
 // {
-// 	int	j;
-
-// 	j = *i;
-// 	while (str[j] != '\0')
-// 	{
-// 		if (str[j] == '\n')
-// 		{
-// 			*i = j;
-// 			return (j);
-// 		}
-// 		j++;
-// 		if (str[j] == '\0')
-// 		{
-// 			*i = j;
-// 			return (j);
-// 		}
-// 	}
-// 	return (0);
+//     if (str [0][i - 1] == '\n')
+//         return (result);
+//     else if (str[0][i - 1] == '\0')
+//     {
+//         free(*str);
+//         *str = 0;
+//         return (result);
+//     }
+//     else
+//     {
+//         free(*str);
+//         *str = 0;
+//         return (NULL);
+//     }
 // }
 
 char     *reader(int fd, char *warehouse, int *readcount)
@@ -76,23 +72,26 @@ char     *reader(int fd, char *warehouse, int *readcount)
     char *str;
     char *temp = NULL;
 
-    str = malloc(BUFFER_SIZE + 1 * sizeof(char));
+    str = calloc(BUFFER_SIZE + 1, sizeof(char));
     *readcount = read(fd, str, BUFFER_SIZE);
     if (!temp)
         temp = ft_strdup("");
     while (*readcount > 0)
     {
         if (!warehouse)
-            warehouse = ft_strdup("");
+            warehouse = ft_strdup(str);
+        else 
+            temp = ft_strjoin(temp, str);
         newline = ft_strchr(str, '\n');
-        temp = ft_strjoin(temp, str);
         if (newline == 1)
             break;
-        ft_bzero(str, BUFFER_SIZE + 1);
         free(str);
-        str = malloc(BUFFER_SIZE + 1 * sizeof(char));
+        str = calloc(BUFFER_SIZE + 1, sizeof(char));
         *readcount = read(fd, str, BUFFER_SIZE);
     }
+    free(str);
+    if (!warehouse)
+        return (NULL);
     return (ft_strjoin(warehouse, temp));
 }
 
@@ -102,7 +101,7 @@ char    *get_next_line(int fd)
     static int i = 0;
     static int j = 0;
     char *result;
-    int readcount = 1;
+    int readcount;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -114,8 +113,8 @@ char    *get_next_line(int fd)
     if (!result || *result == 0)
     {
         free(result);
-        if (warehouse != 0)
-            free(warehouse);
+        // if (warehouse)
+        //     free(warehouse);
         return (NULL);
     }
     i = j + 1;
@@ -130,11 +129,11 @@ char    *get_next_line(int fd)
 // 	i = 0;
 // 	//fd = open("test.txt", O_RDONLY);
 // 	fd = open("test.txt", O_RDONLY);
-// 	while (i < 4)
+// 	while (i < 10)
 // 	{
 // 		printf("%s", get_next_line(fd));
 // 		// get_next_line(fd);
 // 		i++;
 // 	}
-//     // fscanf(stdin, "c");
+//     fscanf(stdin, "c");
 // }
