@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/12 10:44:00 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/20 15:16:32 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/21 14:28:42 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ char	*ft_strjoin(char const *s1, char const *s2);
 unsigned int	ft_strlcpy(char *dst, const char *src, unsigned int dstsize);
 int     position_ofn(char *str, int i);
 char	*ft_substr(char const *s, unsigned int start, unsigned int len);
+void	ft_bzero(void *s, unsigned int n);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 17:02:20 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/20 15:14:00 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/21 12:47:06 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	*(ptr + i) = '\0';
     free((void *)s1);
+    // s1 = 0;
 	return (ptr);
 }
 
@@ -110,4 +111,16 @@ unsigned int	ft_strlcpy(char *dst, const char *src, unsigned int dstsize)
 	while (*(src + i) != '\0')
 		i++;
 	return (i);
+}
+
+void	ft_bzero(void *s, unsigned int n)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (n != 0 && i < n)
+	{
+		*(char *)(s + i) = '\0';
+		i++;
+	}
 }
