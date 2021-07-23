@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 17:02:20 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/22 14:31:59 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/22 14:54:27 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	*(ptr + i) = '\0';
     free((void *)s1);
-    // s1 = 0;
 	return (ptr);
 }
 

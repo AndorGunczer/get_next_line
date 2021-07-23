@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 14:41:57 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/22 14:36:28 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/23 09:48:48 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,27 +72,33 @@ char     *reader(int fd, char *warehouse, int *readcount)
     char *str;
     char *temp = NULL;
 
+
     str = calloc(BUFFER_SIZE + 1, sizeof(char));
     *readcount = read(fd, str, BUFFER_SIZE);
+    if (*readcount == -1)
+        return (NULL);
     if (!temp)
         temp = ft_strdup("");
     while (*readcount > 0)
     {
         if (!warehouse)
-            warehouse = ft_strdup(str);
-        else 
-            temp = ft_strjoin(temp, str);
+            warehouse = ft_strdup("");
+        temp = ft_strjoin(temp, str);
         newline = ft_strchr(str, '\n');
         if (newline == 1)
             break;
         free(str);
         str = calloc(BUFFER_SIZE + 1, sizeof(char));
         *readcount = read(fd, str, BUFFER_SIZE);
+        if (*readcount == -1)
+        return (NULL);
     }
     free(str);
+    warehouse = ft_strjoin(warehouse, temp);
+    free(temp);
     if (!warehouse)
         return (NULL);
-    return (ft_strjoin(warehouse, temp));
+    return (warehouse);
 }
 
 char    *get_next_line(int fd)
@@ -108,13 +114,15 @@ char    *get_next_line(int fd)
     warehouse = reader(fd, warehouse, &readcount);
 	if (readcount == 0 && warehouse == NULL)
 		return (NULL);
+    if (warehouse == NULL)
+		return (NULL);
     j = position_ofn(warehouse, i);
     result = ft_substr(warehouse, i, j - i + 1);
     if (!result || *result == 0)
     {
         free(result);
-        // if (warehouse)
-        //     free(warehouse);
+        if (warehouse)
+            free(warehouse);
         return (NULL);
     }
     i = j + 1;
