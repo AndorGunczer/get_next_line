@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 14:41:57 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/23 09:48:48 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/23 13:47:23 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ char	*ft_substr(char const *s, unsigned int start, unsigned int len)
 	i = 0;
 	if (start >= ft_strlen(s))
 	{
-		ptr = (char *) calloc(1, sizeof(char));
+		ptr = (char *) ft_calloc(1, sizeof(char));
 		*ptr = '\0';
 		return (ptr);
 	}
-	ptr = (char *) calloc(len + 1, sizeof(char));
+	ptr = (char *) ft_calloc(len + 1, sizeof(char));
 	if (ptr == 0)
 		return ((char *)0);
 	while (i < start)
@@ -47,6 +47,14 @@ int     position_ofn(char *str, int i)
 	}
 	return (i);
 }
+
+// static char    *returner(char *result)
+// {
+//     char    str[ft_strlen(result)];
+//     ft_strlcpy(str, result, ft_strlen(result) + 1);
+//     free(result);
+//     return (str);
+// }
 
 // static char *output_int(char **str, char *result, int i)
 // {
@@ -72,11 +80,13 @@ char     *reader(int fd, char *warehouse, int *readcount)
     char *str;
     char *temp = NULL;
 
-
-    str = calloc(BUFFER_SIZE + 1, sizeof(char));
+    str = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
     *readcount = read(fd, str, BUFFER_SIZE);
-    if (*readcount == -1)
+    if (*readcount == -1 || (*readcount == 0 && !warehouse))
+    {
+        free(str);
         return (NULL);
+    }
     if (!temp)
         temp = ft_strdup("");
     while (*readcount > 0)
@@ -90,8 +100,6 @@ char     *reader(int fd, char *warehouse, int *readcount)
         free(str);
         str = calloc(BUFFER_SIZE + 1, sizeof(char));
         *readcount = read(fd, str, BUFFER_SIZE);
-        if (*readcount == -1)
-        return (NULL);
     }
     free(str);
     warehouse = ft_strjoin(warehouse, temp);
@@ -103,29 +111,29 @@ char     *reader(int fd, char *warehouse, int *readcount)
 
 char    *get_next_line(int fd)
 {
-    static char *warehouse = NULL;
-    static int i = 0;
-    static int j = 0;
+    static struct t_list  statics;
     char *result;
     int readcount;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-    warehouse = reader(fd, warehouse, &readcount);
-	if (readcount == 0 && warehouse == NULL)
+    statics.warehouse = reader(fd, statics.warehouse, &readcount);
+	if (readcount == 0 && statics.warehouse == NULL)
 		return (NULL);
-    if (warehouse == NULL)
+    if (statics.warehouse == NULL)
 		return (NULL);
-    j = position_ofn(warehouse, i);
-    result = ft_substr(warehouse, i, j - i + 1);
+    statics.j = position_ofn(statics.warehouse, statics.i);
+    result = ft_substr(statics.warehouse, statics.i, statics.j - statics.i + 1);
     if (!result || *result == 0)
     {
         free(result);
-        if (warehouse)
-            free(warehouse);
+        if (statics.warehouse)
+        {
+            free(statics.warehouse);
+        }
         return (NULL);
     }
-    i = j + 1;
+    statics.i = statics.j + 1;
     return (result); //machst du mir nach ?! //Mein gehirn funktioniert nicht mehr //ja da hab ich voll bock drauf
 }
 
@@ -137,7 +145,7 @@ char    *get_next_line(int fd)
 // 	i = 0;
 // 	//fd = open("test.txt", O_RDONLY);
 // 	fd = open("test.txt", O_RDONLY);
-// 	while (i < 10)
+// 	while (i < 6)
 // 	{
 // 		printf("%s", get_next_line(fd));
 // 		// get_next_line(fd);

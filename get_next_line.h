@@ -6,12 +6,19 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/12 10:44:00 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/21 14:28:42 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/23 11:12:26 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+
+struct  t_list {
+    char *warehouse;
+    int i;
+    int j;
+    int freed;
+};
 
 char    *get_next_line(int fd);
 char    *reader(int fd, char *warehouse, int *readcount);
@@ -23,5 +30,6 @@ unsigned int	ft_strlcpy(char *dst, const char *src, unsigned int dstsize);
 int     position_ofn(char *str, int i);
 char	*ft_substr(char const *s, unsigned int start, unsigned int len);
 void	ft_bzero(void *s, unsigned int n);
+void	*ft_calloc(unsigned int count, unsigned int size);
 
 #endif
