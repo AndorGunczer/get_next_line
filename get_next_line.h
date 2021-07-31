@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/12 10:44:00 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/23 16:18:52 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/31 10:32:54 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,8 @@ unsigned int	ft_strlen(const char *s);
 char	*ft_strdup(const char *s1);
 char	*ft_strjoin(char const *s1, char const *s2);
 unsigned int	ft_strlcpy(char *dst, const char *src, unsigned int dstsize);
-int     position_ofn(char *str, int i);
+int     position_ofn(char *str, int i, int goal);
 char	*ft_substr(char const *s, unsigned int start, unsigned int len);
-void	ft_bzero(void *s, unsigned int n);
 void	*ft_calloc(unsigned int count, unsigned int size);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 17:02:20 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/23 17:33:56 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/31 11:52:10 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*ft_strdup(const char *s1)
 
 	len = ft_strlen(s1);
 	i = 0;
-	ptr = (char *) calloc(len + 1, sizeof(char));
+    ptr = ft_calloc(len + 1, sizeof(char));
 	if (ptr == NULL)
 	{
         free(ptr);
@@ -63,24 +63,6 @@ char	*ft_strdup(const char *s1)
 	}
 	*(ptr + i) = '\0';
 	return (ptr);
-}
-
-int 	ft_strchr(const char *s, int c)
-{
-	while (*s != '\0')
-	{
-		if (*s == (char)c)
-			return (1);
-		s++;
-	}
-	// if (*s == c)
-	// {
-	// 	return (1);
-	// }
-	// else
-	// {
-		return (0);
-	// }
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -104,42 +86,36 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		i++;
 	}
 	*(ptr + i) = '\0';
-    free((void *)s1);
+	if (s1)
+    	free((void *)s1);
 	return (ptr);
 }
 
-unsigned int	ft_strlcpy(char *dst, const char *src, unsigned int dstsize)
+char	*ft_substr(char const *s, unsigned int start, unsigned int len)
 {
 	unsigned int	i;
+    unsigned int    j;
+	char			*ptr;
 
 	i = 0;
-	if (dstsize == 0)
+    j = 0;
+	if (start >= ft_strlen(s))
 	{
-		return (ft_strlen(src));
+		return (NULL);
 	}
-	if (i < dstsize && *(char *)(src + i) != '\0')
-	{
-		while (*(char *)(src + i) != '\0' && i < dstsize - 1)
-		{
-			*(dst + i) = *(char *)(src + i);
-			i++;
-		}
-	}
-	if (i < dstsize)
-		*(dst + i) = '\0';
-	while (*(src + i) != '\0')
+	ptr = (char *) ft_calloc(len + 1, sizeof(char));
+	if (ptr == 0)
+    {
+        free(ptr);
+        return ((char *)0);
+    }
+	while (i < start)
 		i++;
-	return (i);
-}
-
-void	ft_bzero(void *s, unsigned int n)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (n != 0 && i < n)
-	{
-		*(char *)(s + i) = '\0';
-		i++;
-	}
+	while (j < len)
+    {
+        ptr[j] = s[i];
+        j++;
+        i++;
+    }
+	return (ptr);
 }

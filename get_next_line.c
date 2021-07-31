@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 14:41:57 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/23 17:45:52 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/31 14:10:10 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,46 +16,31 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-char	*ft_substr(char const *s, unsigned int start, unsigned int len)
+int     position_ofn(char *str, int i, int goal)
 {
-	unsigned int	i;
-	char			*ptr;
-
-	i = 0;
-	if (start >= ft_strlen(s))
-	{
-		return (NULL);
-	}
-	ptr = (char *) calloc(len + 1, sizeof(char));
-	if (ptr == 0)
+    if (goal == 1)
     {
-        free(ptr);
-        return ((char *)0);
+        while (*(str + i) != '\0')
+	    {
+		    if (*(str + i) == '\n')
+			    return (i);
+		    i++;
+	    }
+	    return (i);
     }
-	while (i < start)
-		i++;
-	ft_strlcpy(ptr, (s + i), len + 1);
-	return (ptr);
+    else if (goal == 2)
+    {
+        while (*str != '\0')
+	    {
+		    if (*str == '\n')
+			    return (1);
+		    str++;
+	    }
+	    return (0);
+    }
+    else
+        return (0);
 }
-
-int     position_ofn(char *str, int i)
-{
-    while (*(str + i) != '\0')
-	{
-		if (*(str + i) == '\n')
-			return (i);
-		i++;
-	}
-	return (i);
-}
-
-// static char    *returner(char *result)
-// {
-//     char    str[ft_strlen(result)];
-//     ft_strlcpy(str, result, ft_strlen(result) + 1);
-//     free(result);
-//     return (str);
-// }
 
 static char *output_int(char **str, char *result, int i)
 {
@@ -75,13 +60,30 @@ static char *output_int(char **str, char *result, int i)
     }
 }
 
-char     *reader(int fd, char *warehouse, int *readcount)
+char    *reader_helper(int fd, int *readcount, char *temp, int *newline, char *str)
+{
+    while (*readcount > 0)
+    {
+        temp = ft_strjoin(temp, str);
+        *newline = position_ofn(str, 0, 2);
+        if (*newline == 1)
+            break;
+        if (str)
+            free(str);
+        str = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+        *readcount = read(fd, str, BUFFER_SIZE);
+    }
+    free(str);
+    return (temp);
+}
+
+char    *reader(int fd, char *warehouse, int *readcount)
 {
     int newline;
     char *str;
     char *temp = NULL;
 
-    str = calloc(BUFFER_SIZE + 1, sizeof(char));
+    str = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
     *readcount = read(fd, str, BUFFER_SIZE);
     if (*readcount == -1 || (*readcount == 0 && !warehouse))
     {
@@ -92,19 +94,10 @@ char     *reader(int fd, char *warehouse, int *readcount)
         temp = ft_strdup("");
     if (!warehouse && readcount > 0)
         warehouse = ft_strdup("");
-    while (*readcount > 0)
-    {
-        temp = ft_strjoin(temp, str);
-        newline = ft_strchr(str, '\n');
-        if (newline == 1)
-            break;
-        free(str);
-        str = calloc(BUFFER_SIZE + 1, sizeof(char));
-        *readcount = read(fd, str, BUFFER_SIZE);
-    }
-    free(str);
+    temp = reader_helper(fd, readcount, temp, &newline, str);
     warehouse = ft_strjoin(warehouse, temp);
-    free(temp);
+    if (temp != NULL)
+        free(temp);
     if (!warehouse)
         return (NULL);
     return (warehouse);
@@ -123,30 +116,25 @@ char    *get_next_line(int fd)
 		return (NULL);
     if (!statics.warehouse)
 		return (NULL);
-    statics.j = position_ofn(statics.warehouse, statics.i);
+    statics.j = position_ofn(statics.warehouse, statics.i, 1);
     result = ft_substr(statics.warehouse, statics.i, statics.j - statics.i + 1);
-    // if (!result || *result == 0)
-    // {
-    //     free(result);
-    //     return (NULL);
-    // }
     statics.i = statics.j + 1;
-    return (output_int(&statics.warehouse, result, statics.j)); //machst du mir nach ?! //Mein gehirn funktioniert nicht mehr //ja da hab ich voll bock drauf
+    return (output_int(&statics.warehouse, result, statics.j));
 }
 
-int	main(void)
-{
-	int		fd;
-	int		i;
+//  int	main(void)
+//  {
+//  	int		fd;
+//  	int		i;
 
-	i = 0;
-	//fd = open("test.txt", O_RDONLY);
-	fd = open("test.txt", O_RDONLY);
-	while (i < 10)
-	{
-		printf("%s", get_next_line(fd));
-		// get_next_line(fd);
-		i++;
-	}
-    // fscanf(stdin, "c");
-}
+//  	i = 0;
+//  	//fd = open("test.txt", O_RDONLY);
+//  	fd = open("test.txt", O_RDONLY);
+//  	while (i < 10)
+//  	{
+//  		printf("%s", get_next_line(fd));
+//  		// get_next_line(fd);
+//  		i++;
+//  	}
+//     fscanf(stdin, "c");
+//  }
