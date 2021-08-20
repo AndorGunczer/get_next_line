@@ -6,7 +6,7 @@
 /*   By: agunczer <agunczer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 17:02:20 by agunczer          #+#    #+#             */
-/*   Updated: 2021/07/31 11:52:10 by agunczer         ###   ########.fr       */
+/*   Updated: 2021/07/31 16:08:32 by agunczer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ unsigned int	ft_strlen(const char *s)
 void	*ft_calloc(unsigned int count, unsigned int size)
 {
 	unsigned int	i;
-	void	*ptr;
+	void			*ptr;
 
 	i = 0;
 	ptr = malloc(count * size);
 	if (ptr == 0)
 	{
-        free (ptr);
+		free (ptr);
 		return ((void *)0);
 	}
 	while (i < count * size)
@@ -50,12 +50,12 @@ char	*ft_strdup(const char *s1)
 
 	len = ft_strlen(s1);
 	i = 0;
-    ptr = ft_calloc(len + 1, sizeof(char));
+	ptr = ft_calloc(len + 1, sizeof(char));
 	if (ptr == NULL)
 	{
-        free(ptr);
-        return ((void *)0);
-    }
+		free(ptr);
+		return ((void *)0);
+	}
 	while (i < len)
 	{
 		*(ptr + i) = *(s1 + i);
@@ -87,35 +87,35 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	*(ptr + i) = '\0';
 	if (s1)
-    	free((void *)s1);
+		free((void *)s1);
 	return (ptr);
 }
 
 char	*ft_substr(char const *s, unsigned int start, unsigned int len)
 {
 	unsigned int	i;
-    unsigned int    j;
+	unsigned int	j;
 	char			*ptr;
 
 	i = 0;
-    j = 0;
+	j = 0;
 	if (start >= ft_strlen(s))
 	{
 		return (NULL);
 	}
 	ptr = (char *) ft_calloc(len + 1, sizeof(char));
 	if (ptr == 0)
-    {
-        free(ptr);
-        return ((char *)0);
-    }
+	{
+		free(ptr);
+		return ((char *)0);
+	}
 	while (i < start)
 		i++;
 	while (j < len)
-    {
-        ptr[j] = s[i];
-        j++;
-        i++;
-    }
+	{
+		ptr[j] = s[i];
+		j++;
+		i++;
+	}
 	return (ptr);
 }
